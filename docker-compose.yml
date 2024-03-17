@@ -4,19 +4,16 @@ services:
   redis:
     container_name: redis-stack
     image: redis/redis-stack-server:latest
-    ports:
-      - "1234:6379"
     environment:
       REDIS_ARGS: "--requirepass 2048"
     networks:
       - my-network
 
   golang-websocket:
+    container_name: golang-server
     build:
       context: .
-      dockerfile: /home/gehnmart/Kursova/go-chat-app/Dockerfile
-    ports:
-      - "8081:8081"
+      dockerfile: Dockerfile
     command: ./gochatapp --server=websocket
     networks:
       - my-network
@@ -25,11 +22,10 @@ services:
       - golang-http
 
   golang-http:
+    container_name: golang-server
     build:
       context: .
-      dockerfile: /home/gehnmart/Kursova/go-chat-app/Dockerfile
-    ports:
-      - "8080:8080"
+      dockerfile: Dockerfile
     command: ./gochatapp --server=http
     networks:
       - my-network

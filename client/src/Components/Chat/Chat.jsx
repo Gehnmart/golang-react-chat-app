@@ -29,7 +29,7 @@ class Chat extends Component {
       message: '',
       to: '',
       isInvalid: false,
-      endpoint: 'http://192.168.0.14:8080',
+      endpoint: 'http://golang-server:8080',
       contact: '',
       contacts: [],
       renderContactList: [],
@@ -109,7 +109,7 @@ class Chat extends Component {
 
   fetchChatHistory = async (u1 = 'user1', u2 = 'user2') => {
     const res = await axios.get(
-      `http://192.168.0.14:8080/chat-history?u1=${u1}&u2=${u2}`
+      `http://golang-server:8080/chat-history?u1=${u1}&u2=${u2}`
     );
 
     console.log(res.data, res.data.data.reverse());
