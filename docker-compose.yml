@@ -11,7 +11,7 @@ services:
     networks:
       - my-network
 
-  golang-server:
+  golang-websocket:
     build:
       context: .
       dockerfile: /home/gehnmart/Kursova/go-chat-app/Dockerfile
@@ -20,8 +20,11 @@ services:
     command: ./gochatapp --server=websocket
     networks:
       - my-network
+    depends_on:
+      - redis
+      - golang-http
 
-  golang-client:
+  golang-http:
     build:
       context: .
       dockerfile: /home/gehnmart/Kursova/go-chat-app/Dockerfile
@@ -30,7 +33,21 @@ services:
     command: ./gochatapp --server=http
     networks:
       - my-network
+    depends_on:
+      - redis
   
+  node:
+    image: node:20
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+    working_dir: /app
+    command: npm start
+    networks:
+      - my-network
+    depends_on:
+      - golang-websocket
 networks:
   my-network:
     driver: bridge
