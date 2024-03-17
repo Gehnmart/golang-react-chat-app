@@ -24,7 +24,7 @@ class Register extends Component {
       password: '',
       message: '',
       isInvalid: '',
-      endpoint: 'http://golang-server:8080/register',
+      endpoint: 'http://localhost:8080/register',
       redirect: false,
       redirectTo: '/chat?u=',
     };

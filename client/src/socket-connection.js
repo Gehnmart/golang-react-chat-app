@@ -1,6 +1,6 @@
 class SocketConnection {
   constructor() {
-    this.socket = new WebSocket(`ws://golang-websocket:8081/ws`);
+    this.socket = new WebSocket(`ws://localhost:8081/ws`);
   }
 
   connect = cb => {

@@ -24,7 +24,7 @@ class Login extends Component {
       password: '',
       message: '',
       isInvalid: false,
-      endpoint: 'http://golang-server:8080/login',
+      endpoint: 'http://localhost:8080/login',
       redirect: false,
       redirectTo: '/chat?u=',
     };

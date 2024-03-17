@@ -11,6 +11,8 @@ services:
 
   golang-websocket:
     container_name: golang-websocket
+    ports:
+      - "8081:8081"
     build:
       context: .
       dockerfile: Dockerfile
@@ -19,10 +21,11 @@ services:
       - my-network
     depends_on:
       - redis
-      - golang-http
 
   golang-http:
     container_name: golang-http
+    ports:
+      - "8080:8080"
     build:
       context: .
       dockerfile: Dockerfile
@@ -33,9 +36,10 @@ services:
       - redis
   
   node:
+    container_name: node
     image: node:20
     ports:
-      - "3000:3000"
+      - "3000:3000" # Проброс порта Node.js в хост
     volumes:
       - ./client:/app
     working_dir: /app
@@ -44,6 +48,8 @@ services:
       - my-network
     depends_on:
       - golang-websocket
+
 networks:
   my-network:
     driver: bridge
+
