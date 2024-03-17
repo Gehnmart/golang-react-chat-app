@@ -51,14 +51,14 @@ class AddContact extends Component {
               />
               <InputRightElement width="6rem">
                 <Button colorScheme={'teal'} h="2rem" size="lg">
-                  Add
+                  Добавить
                 </Button>
               </InputRightElement>
             </InputGroup>
             {!this.state.isInvalid ? (
               ''
             ) : (
-              <FormErrorMessage>username does not exist</FormErrorMessage>
+              <FormErrorMessage>Пользователь с таким именем не найден</FormErrorMessage>
             )}
           </FormControl>
         </Box>

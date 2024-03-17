@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import SocketConnection from '../../socket-connection';
+import './Chat.css';
 
 import {
   Container,
@@ -28,7 +29,7 @@ class Chat extends Component {
       message: '',
       to: '',
       isInvalid: false,
-      endpoint: 'http://localhost:8080',
+      endpoint: 'http://192.168.0.14:8080',
       contact: '',
       contacts: [],
       renderContactList: [],
@@ -75,7 +76,10 @@ class Chat extends Component {
   };
 
   onSubmit = e => {
-    if (e.charCode === 0 && e.code === 'Enter') {
+    if (this.state.message.trim() === '') {
+      return; // Ничего не делаем, если сообщение пустое или содержит только пробелы
+    }
+    if (e.type === 'submit' || e.code === 'Enter' || e.key === 'Enter') {
       e.preventDefault();
       const msg = {
         type: 'message',
@@ -105,7 +109,7 @@ class Chat extends Component {
 
   fetchChatHistory = async (u1 = 'user1', u2 = 'user2') => {
     const res = await axios.get(
-      `http://localhost:8080/chat-history?u1=${u1}&u2=${u2}`
+      `http://192.168.0.14:8080/chat-history?u1=${u1}&u2=${u2}`
     );
 
     console.log(res.data, res.data.data.reverse());
@@ -119,24 +123,36 @@ class Chat extends Component {
 
   addContact = async e => {
     e.preventDefault();
+    if (this.state.contact.trim() === '') {
+      this.setState({ isInvalid: true});
+      return; // Ничего не делаем, если контакт пустой или содержит только пробелы
+    }
     try {
       const res = await axios.post(`${this.state.endpoint}/verify-contact`, {
         username: this.state.contact,
       });
 
       console.log(res.data);
+      
       if (!res.data.status) {
         this.setState({ isInvalid: true });
       } else {
-        // reset state on success
-        this.setState({ isInvalid: false });
-
-        let contacts = this.state.contacts;
-        contacts.unshift({
-          username: this.state.contact,
-          last_activity: Date.now() / 1000,
-        });
-        this.renderContactList(contacts);
+        // Проверка, существует ли контакт уже в массиве
+        const isContactExist = this.state.contacts.some(contact => contact.username === this.state.contact);
+  
+        if (!isContactExist) {
+          // Контакт не существует, добавляем его
+          let contacts = this.state.contacts;
+          contacts.unshift({
+            username: this.state.contact,
+            last_activity: Date.now() / 1000,
+          });
+          this.renderContactList(contacts);
+          this.setState({ isInvalid: false, contacts }); // Обновляем состояние с новым списком контактов
+        } else {
+          this.state.contacts.find(contact => contact.username === this.state.contact);
+          this.setState({ isInvalid: true });
+        }
       }
     } catch (error) {
       console.error(error);
@@ -172,7 +188,7 @@ class Chat extends Component {
                 <Input
                   variant="flushed"
                   type="text"
-                  placeholder="Add Contact"
+                  placeholder="Добавить контакт"
                   name="contact"
                   value={this.state.contact}
                   onChange={this.onChange}
@@ -186,36 +202,33 @@ class Chat extends Component {
                     type="submit"
                     onClick={this.addContact}
                   >
-                    Add
+                    Добавить
                   </Button>
                 </InputRightElement>
               </InputGroup>
               {!this.state.isContactInvalid ? (
                 ''
               ) : (
-                <FormErrorMessage>contact does not exist</FormErrorMessage>
+                <FormErrorMessage>Контакт с таким именем не найден</FormErrorMessage>
               )}
             </FormControl>
           </Box>
         </Container>
-        <Flex>
+        <Flex
+          borderWidth={1}
+          borderRadius={'10px'}>
           <Box
             textAlign={'left'}
             overflowY={'scroll'}
+            borderRightWidth={'1px'}
             flex="1"
             h={'32rem'}
-            borderWidth={1}
-            borderRightWidth={0}
-            borderRadius={'xl'}
           >
             {this.state.renderContactList}
           </Box>
 
           <Box flex="2">
             <Container
-              borderWidth={1}
-              borderLeftWidth={0}
-              borderBottomWidth={0}
               borderRadius={'xl'}
               textAlign={'right'}
               h={'25rem'}
@@ -231,10 +244,10 @@ class Chat extends Component {
               <FormControl onKeyDown={this.onSubmit} onSubmit={this.onSubmit}>
                 <Textarea
                   type="submit"
-                  borderWidth={1}
-                  borderRadius={'xl'}
+                  borderRadius={'0px 0px 10px 0px'}
+                  borderWidth={'1px 0px 0px 0px'}
                   minH={'7rem'}
-                  placeholder="Aur Sunao... Press enter to send..."
+                  placeholder="Начните писать... Нажмите Ввод для отправки сообщения!"
                   size="lg"
                   resize={'none'}
                   name="message"

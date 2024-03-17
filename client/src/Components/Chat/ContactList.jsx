@@ -16,9 +16,13 @@ const ContactList = (contacts, sendMessage) => {
           marginTop={2}
           marginBottom={2}
           paddingRight={2}
-          borderRadius={20}
+          margin={2}
+          borderRadius={10}
           borderColor="-moz-initial"
           borderBottomColor={'whiteAlpha.500'}
+          _hover={{ backgroundColor: 'teal.400',
+                    transition: 'background-color 0.2s ease-in-out' }}
+          width="95%"
           onClick={() => sendMessage(c.username)}
         >
           <Text> {c.username} </Text>

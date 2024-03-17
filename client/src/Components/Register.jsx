@@ -24,7 +24,7 @@ class Register extends Component {
       password: '',
       message: '',
       isInvalid: '',
-      endpoint: 'http://localhost:8080/register',
+      endpoint: 'http://192.168.0.14:8080/register',
       redirect: false,
       redirectTo: '/chat?u=',
     };
@@ -69,10 +69,10 @@ class Register extends Component {
           <Box borderRadius="lg" padding={10} borderWidth="2px">
             <Stack spacing={5}>
               <FormControl isInvalid={this.state.isInvalid}>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Имя пользователя</FormLabel>
                 <Input
                   type="text"
-                  placeholder="Username"
+                  placeholder="Имя Пользователя"
                   name="username"
                   value={this.state.username}
                   onChange={this.onChange}
@@ -86,15 +86,15 @@ class Register extends Component {
                 {/* <FormHelperText>use a unique username</FormHelperText> */}
               </FormControl>
               <FormControl>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Пароль</FormLabel>
                 <Input
                   type="password"
-                  placeholder="Password"
+                  placeholder="Пароль"
                   name="password"
                   value={this.state.password}
                   onChange={this.onChange}
                 />
-                <FormHelperText>use a dummy password</FormHelperText>
+                <FormHelperText></FormHelperText>
               </FormControl>
               <Button
                 size="lg"
@@ -104,7 +104,7 @@ class Register extends Component {
                 type="submit"
                 onClick={this.onSubmit}
               >
-                Register
+                Регистрация
               </Button>
             </Stack>
           </Box>

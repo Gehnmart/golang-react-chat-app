@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  redis:
+    container_name: redis-stack
+    image: redis/redis-stack-server:latest
+    ports:
+      - "1234:6379"
+    environment:
+      REDIS_ARGS: "--requirepass 2048"
+    networks:
+      - my-network
+
+  golang-server:
+    build:
+      context: .
+      dockerfile: /home/gehnmart/Kursova/go-chat-app/Dockerfile
+    ports:
+      - "8081:8081"
+    command: ./gochatapp --server=websocket
+    networks:
+      - my-network
+
+  golang-client:
+    build:
+      context: .
+      dockerfile: /home/gehnmart/Kursova/go-chat-app/Dockerfile
+    ports:
+      - "8080:8080"
+    command: ./gochatapp --server=http
+    networks:
+      - my-network
+  
+networks:
+  my-network:
+    driver: bridge

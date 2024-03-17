@@ -24,7 +24,7 @@ class Login extends Component {
       password: '',
       message: '',
       isInvalid: false,
-      endpoint: 'http://localhost:8080/login',
+      endpoint: 'http://192.168.0.14:8080/login',
       redirect: false,
       redirectTo: '/chat?u=',
     };
@@ -69,7 +69,7 @@ class Login extends Component {
           <Box borderRadius="lg" padding={10} borderWidth="2px">
             <Stack spacing={5}>
               <FormControl isInvalid={this.state.isInvalid}>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>Имя пользователя</FormLabel>
                 <Input
                   type="text"
                   placeholder="Username"
@@ -79,7 +79,7 @@ class Login extends Component {
                 />
               </FormControl>
               <FormControl isInvalid={this.state.isInvalid}>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Пароль</FormLabel>
                 <Input
                   type="password"
                   placeholder="Password"
@@ -91,7 +91,7 @@ class Login extends Component {
                   ''
                 ) : (
                   <FormErrorMessage>
-                    invalid username or password
+                    Неправильое имя пользователя или пароль
                   </FormErrorMessage>
                 )}
               </FormControl>
@@ -103,7 +103,7 @@ class Login extends Component {
                 type="submit"
                 onClick={this.onSubmit}
               >
-                Login
+                Вход
               </Button>
             </Stack>
             <Box paddingTop={3}>
