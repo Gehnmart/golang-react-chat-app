@@ -10,7 +10,7 @@ services:
       - my-network
 
   golang-websocket:
-    container_name: golang-server
+    container_name: golang-websocket
     build:
       context: .
       dockerfile: Dockerfile
@@ -22,7 +22,7 @@ services:
       - golang-http
 
   golang-http:
-    container_name: golang-server
+    container_name: golang-http
     build:
       context: .
       dockerfile: Dockerfile
