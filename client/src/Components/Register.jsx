@@ -23,7 +23,8 @@ class Register extends Component {
       username: '',
       password: '',
       message: '',
-      isInvalid: '',
+      isInvalidUsername: '',
+      isInvalidPassword: '',
       endpoint: 'http://localhost:8080/register',
       redirect: false,
       redirectTo: '/chat?u=',
@@ -37,7 +38,25 @@ class Register extends Component {
 
   onSubmit = async e => {
     e.preventDefault();
+    this.setState({ message: '', isInvalidUsername: false, isInvalidPassword: false });
 
+    if (this.state.username === '') {
+      this.setState({ message: 'Имя пользователя не может быть пустым', isInvalidUsername: true });
+      return;
+    }
+    if (this.state.password === '') {
+      this.setState({ message: 'Пароль не может быть пустым', isInvalidPassword: true });
+      return;
+    }
+    if (this.state.username.length < 6) {
+      this.setState({ message: 'Имя пользователя должно содержать не менее 6 символов', isInvalidUsername: true });
+      return;
+    }
+    if (this.state.password.length < 6) {
+      this.setState({ message: 'Пароль должен содержать не менее 6 символов', isInvalidPassword: true });
+      return;
+    }
+    
     try {
       const res = await axios.post(this.state.endpoint, {
         username: this.state.username,
@@ -50,11 +69,11 @@ class Register extends Component {
         this.setState({ redirect: true, redirectTo });
       } else {
         // on failed
-        this.setState({ message: res.data.message, isInvalid: true });
+        this.setState({ message: "Неверное имя пользователя или такое имя уже существует", isInvalidUsername: true });
       }
     } catch (error) {
       console.log(error);
-      this.setState({ message: 'something went wrong', isInvalid: true });
+      this.setState({ message: 'Внутренняя ошибка', isInvalidUsername: true });
     }
   };
 
@@ -68,7 +87,9 @@ class Register extends Component {
         <Container marginBlockStart={10} textAlign={'left'} maxW="2xl">
           <Box borderRadius="lg" padding={10} borderWidth="2px">
             <Stack spacing={5}>
-              <FormControl isInvalid={this.state.isInvalid}>
+              <FormControl isInvalid={this.state.isInvalidUsername}
+              _valid={{borderColor: 'green.300'}
+              }>
                 <FormLabel>Имя пользователя</FormLabel>
                 <Input
                   type="text"
@@ -78,14 +99,14 @@ class Register extends Component {
                   onChange={this.onChange}
                 />
 
-                {!this.state.isInvalid ? (
+                {!this.state.isInvalidUsername ? (
                   <></>
                 ) : (
                   <FormErrorMessage>{this.state.message}</FormErrorMessage>
                 )}
                 {/* <FormHelperText>use a unique username</FormHelperText> */}
               </FormControl>
-              <FormControl>
+              <FormControl isInvalid={this.state.isInvalidPassword}>
                 <FormLabel>Пароль</FormLabel>
                 <Input
                   type="password"
@@ -94,6 +115,11 @@ class Register extends Component {
                   value={this.state.password}
                   onChange={this.onChange}
                 />
+                {!this.state.isInvalidPassword ? (
+                  <></>
+                ) : (
+                  <FormErrorMessage>{this.state.message}</FormErrorMessage>
+                )}
                 <FormHelperText></FormHelperText>
               </FormControl>
               <Button

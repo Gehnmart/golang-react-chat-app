@@ -4,6 +4,8 @@ services:
   redis:
     container_name: redis-stack
     image: redis/redis-stack-server:latest
+    ports:
+      - "2048:6379"
     environment:
       REDIS_ARGS: "--requirepass 2048"
     networks:
@@ -37,9 +39,9 @@ services:
   
   node:
     container_name: node
-    image: node:20
+    image: node:18
     ports:
-      - "3000:3000" # Проброс порта Node.js в хост
+      - "3000:3000"
     volumes:
       - ./client:/app
     working_dir: /app
