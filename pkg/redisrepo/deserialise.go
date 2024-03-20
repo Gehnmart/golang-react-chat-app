@@ -71,3 +71,5 @@ func DeserialiseContactList(contacts []redis.Z) []model.ContactList {
 
 	return contactList
 }
+
+//

@@ -192,3 +192,5 @@ func contactList(username string) *response {
 	res.Total = len(contactList)
 	return res
 }
+
+//

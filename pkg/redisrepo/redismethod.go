@@ -187,3 +187,5 @@ func FetchContactList(username string) ([]model.ContactList, error) {
 
 	return contactList, nil
 }
+
+//

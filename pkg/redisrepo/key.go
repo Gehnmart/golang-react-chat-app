@@ -24,3 +24,5 @@ func chatIndex() string {
 func contactListZKey(username string) string {
 	return "contacts:" + username
 }
+
+//
